@@ -1,16 +1,69 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+ <div>
+  <!-- Content -->
+  <div class="px-3 py-10 md:px-10">
+        <div class="w-full sm:w-1/2 lg:w-1/3 mx-auto">
+         
+            <!-- Todo spinner -->
+            <TodoSpinner v-if="loading" />
+            <!--/ Todo spinner -->
+
+          
+              <!-- Todo form -->
+                          <TodoForm />
+                                        <!-- Todo items -->
+                           <TodoItems v-if="$store.state.todos.length"/>
+                                        
+                                        <!-- Todo empty -->
+                           <TodoEmpty v-else/>
+                       
+           
+           
+        </div>
+    </div>
+    <!--/ Content -->
+
+
+ </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TodoForm from './components/TodoForm.vue';
+import TodoSpinner from './components/TodoSpinner.vue';
+import TodoItems from './components/TodoItems.vue';
+import TodoEmpty from './components/TodoEmpty.vue';
+//import axios from 'axios';
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TodoForm,
+    TodoSpinner,
+    TodoItems,
+    TodoEmpty
+  },
+  data(){
+    return{
+      loading: false
+    }
+  },
+  created(){
+    this.loading = true;
+    this.$store.dispatch('getTodos').finally(() => {
+    this.loading = false;
+    });
+   
   }
+  /*created(){
+    this.loading = true
+    axios.get('http://localhost:3000/todos').then((response) => {
+        setTimeout(()=>{this.$store.commit('storeTodos', response.data);
+        this.loading = false}, 1000)
+       //nesta linha de codigo estamos comitando os dados vindos da resposta da requisicao feita na api e passando para a state criada todos 
+     // this.todos = response.data; // funcao que pega os dados da api criada database.json e salva a resposta da requisicao axios nos todos criados em data 
+    })//.finally(() => {
+      //setTimeout(()=> this.loading = false, 3000);
+   // })
+  }*/
 }
 </script>
 
